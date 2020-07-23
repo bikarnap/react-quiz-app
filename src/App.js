@@ -16,7 +16,8 @@ function App() {
   const [ score, setScore ] = useState(0)
   const [ disabled, setDisabled ] = useState(false)
   const [ wasLastQuestion, setWasLastQuestion ] = useState(false)
-  // const [ reviews, setReviews ] = useState([])
+  const [ reviews, setReviews ] = useState([])
+  const [ userAnswer, setUserAnswer ] = useState('')
   //const [ nextDisabled, setNextDisabled ] = useState(true)
 
   useEffect(() => {
@@ -36,6 +37,8 @@ function App() {
   const startGame = () => {
     setQuestionNumber(0)
     setScore(0)
+    setReviews([])
+    setUserAnswer('')
     setDisabled(false)
     setWasLastQuestion(false)
     setCurrentQuestion(questions[questionNumber].question)
@@ -51,6 +54,11 @@ function App() {
         setCurrentQuestion(questions[questionNumber].question)
         setOptions(manageOptions())
         setQuestionNumber(prev => prev + 1)
+        setReviews(reviews.concat({
+          question: questions[questionNumber - 1].question, 
+          answer: questions[questionNumber - 1].correct_answer, 
+          playerAnswer: userAnswer ? userAnswer : "skipped the question"
+        }))
       } else {
         setGameOver(true)
         setQuestionNumber(0)
@@ -61,6 +69,7 @@ function App() {
 
   const handleResponse = event => {
     const response = event.target.value
+    setUserAnswer(response)
     console.log(response)
     console.log(questions[questionNumber - 1].correct_answer)
     if(response === questions[questionNumber - 1].correct_answer) {
@@ -74,7 +83,7 @@ function App() {
   return(
     <div className="App">
       <h1>Quiz Game</h1>
-      <Review questions={questions} wasLastQuestion={wasLastQuestion} />
+      <Review reviews={reviews} wasLastQuestion={wasLastQuestion} />
       {
       !gameOver 
         ? <div>
@@ -92,6 +101,7 @@ function App() {
         question={currentQuestion}
         options={options}
         disabled={disabled}
+        wasLastQuestion={wasLastQuestion}
         // nextDisabled={nextDisabled}
       />
       {/* <Quiz

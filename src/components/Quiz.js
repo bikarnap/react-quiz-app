@@ -1,10 +1,10 @@
 import React from 'react'
 
 const Quiz = (props) => {
-  const { gameOver, question, options, handleStart, handleNextQuestion, handleResponse, disabled } = props
+  const { gameOver, question, options, handleStart, handleNextQuestion, handleResponse, disabled, wasLastQuestion } = props
   if(gameOver) {
     return(
-      <button onClick={handleStart}>Start Quiz</button>
+      <button onClick={handleStart}>{wasLastQuestion ? 'Play Again' : 'Start Quiz'}</button>
     )
   }
   return(
