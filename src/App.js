@@ -18,6 +18,7 @@ function App() {
   const [ wasLastQuestion, setWasLastQuestion ] = useState(false)
   const [ reviews, setReviews ] = useState([])
   const [ userAnswer, setUserAnswer ] = useState('')
+  const [ rightAnsNum, setRightAnsNum ] = useState(0)
   //const [ nextDisabled, setNextDisabled ] = useState(true)
 
   useEffect(() => {
@@ -26,7 +27,6 @@ function App() {
       .then(json => setQuestions(json.results))
   }, [])
 
-  console.log(questions)
   const manageOptions = () => {
     let allOptions = questions[questionNumber].incorrect_answers.concat(
       questions[questionNumber].correct_answer
@@ -37,6 +37,7 @@ function App() {
   const startGame = () => {
     setQuestionNumber(0)
     setScore(0)
+    setRightAnsNum(0)
     setReviews([])
     setUserAnswer('')
     setDisabled(false)
@@ -70,10 +71,9 @@ function App() {
   const handleResponse = event => {
     const response = event.target.value
     setUserAnswer(response)
-    console.log(response)
-    console.log(questions[questionNumber - 1].correct_answer)
     if(response === questions[questionNumber - 1].correct_answer) {
       setScore(prev => prev + 10)
+      setRightAnsNum(prev => prev + 1)
     } else {
       setScore(prev => prev - 5)
     }
@@ -83,7 +83,7 @@ function App() {
   return(
     <div className="App">
       <h1>Quiz Game</h1>
-      <Review reviews={reviews} wasLastQuestion={wasLastQuestion} />
+      <Review reviews={reviews} wasLastQuestion={wasLastQuestion} rightAnswer={rightAnsNum} wrongAnswer={TOTAL_QUESTIONS- rightAnsNum} />
       {
       !gameOver 
         ? <div>

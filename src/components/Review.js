@@ -1,10 +1,11 @@
 import React from 'react'
 
-const Review = ({ wasLastQuestion, reviews }) => {
+const Review = ({ wasLastQuestion, reviews, rightAnswer, wrongAnswer }) => {
   if(wasLastQuestion) {
     return(
       <div>
         Your Quiz review
+        <p>{rightAnswer} correct answers, {wrongAnswer} incorrect answers</p>
         <div>
           {reviews.map(review => 
           <div key={review.question}>
